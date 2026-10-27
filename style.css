@@ -1,0 +1,105 @@
+body {
+    background-color: lightgray;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+h1 {
+    color: darkblue;
+    background-color: white;
+    padding: 10px;
+    border: 2px solid black;
+}
+
+form {
+    background-color: white;
+    width: 320px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 3px solid #0056b3;
+    border-radius: 10px;
+}
+
+label {
+    font-weight: bold;
+    color: darkblue;
+}
+
+input[type="text"], 
+input[type="number"] {
+    width: 80%;
+    padding: 5px;
+    border: 1px solid gray;
+}
+
+button {
+    background-color: green;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: darkgreen;
+}
+
+h2 {
+    color: purple;
+    margin-top: 25px;
+}
+
+#resultadoNotas {
+    background-color: lightyellow;
+    border: 2px dashed orange;
+    width: 320px;
+    margin: 0 auto;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+hr {
+    border: 1px solid gray;
+    margin: 30px 0;
+}
+
+#archivoNotas {
+    margin-bottom: 10px;
+}
+
+#btnMostrarNotas {
+    background-color: darkorange;
+}
+
+table {
+    background-color: white;
+    margin: 15px auto;
+    border-collapse: collapse;
+    width: 80%;
+    max-width: 500px;
+}
+
+th {
+    background-color: darkblue;
+    color: white;
+    padding: 8px;
+}
+
+td {
+    padding: 6px;
+    border: 1px solid black;
+}
+
+#vistaConsultaNotas {
+    background-color: white;
+    width: 80%;
+    max-width: 550px;
+    margin: 15px auto;
+    padding: 15px;
+    border: 2px solid gray;
+    border-radius: 8px;
+}

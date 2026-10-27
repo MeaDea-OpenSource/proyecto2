@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Control de Notas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Control De Notas</h1>
+
+    <form id="formNotas">
+        <label>Nombre:</label><br>
+        <input type="text" id="nombreNota"><br><br>
+
+        <label>NIE:</label><br>
+        <input type="text" id="nieNota"><br><br>
+
+        <label>Nota 1:</label><br>
+        <input type="number" step="0.01" id="n1"><br><br>
+
+        <label>Nota 2:</label><br>
+        <input type="number" step="0.01" id="n2"><br><br>
+
+        <label>Nota 3:</label><br>
+        <input type="number" step="0.01" id="n3"><br><br>
+
+        <label>Examen:</label><br>
+        <input type="number" step="0.01" id="examen"><br><br>
+
+        <button type="submit">CALCULAR</button>
+    </form>
+
+    <p id="errorNota" style="color: red;"></p>
+
+    <h2>Resultado:</h2>
+    <div id="resultadoNotas"></div>
+
+    <hr>
+
+    <h2>CONSULTAR NOTAS</h2>
+    <input type="file" id="archivoNotas">
+    <button type="button" id="btnMostrarNotas">MOSTRAR REGISTROS</button>
+    <div id="vistaConsultaNotas"></div>
+
+    <script>
+        const formNotas = document.getElementById('formNotas');
+        const errorNota = document.getElementById('errorNota');
+        const resultadoNotas = document.getElementById('resultadoNotas');
+
+        formNotas.addEventListener('submit', function(event) {
+            event.preventDefault();
+            errorNota.textContent = '';
+            resultadoNotas.innerHTML = '';
+
+            const nombre = document.getElementById('nombreNota').value;
+            const nie = document.getElementById('nieNota').value;
+            const n1 = parseFloat(document.getElementById('n1').value);
+            const n2 = parseFloat(document.getElementById('n2').value);
+            const n3 = parseFloat(document.getElementById('n3').value);
+            const examen = parseFloat(document.getElementById('examen').value);
+
+            //Con esto nos aseguramos que las notas no sea menos de 0 o mas de 10
+            if (n1 < 0 || n1 > 10 || n2 < 0 || n2 > 10 || n3 < 0 || n3 > 10 || examen < 0 || examen > 10) {
+                errorNota.textContent = '▲ ERROR: La nota debe estar entre 0 y 10.';
+                return;
+            }
+
+            //La suma del promedio
+            const promedio = (n1 + n2 + n3 + examen) / 4;
+
+            //La clasficacion
+            let clasificacion = '';
+            if (promedio >= 9.0 && promedio <= 10.0) {
+                clasificacion = 'Excelente';
+            } else if (promedio >= 7.0 && promedio <= 8.9) {
+                clasificacion = 'Muy bueno';
+            } else if (promedio >= 6.0 && promedio <= 6.9) {
+                clasificacion = 'Aprobado';
+            } else {
+                clasificacion = 'Reprobado';
+            }
+
+            //Con esto se muestran los resultados
+            resultadoNotas.innerHTML = `
+                <p><strong>ESTUDIANTE:</strong> ${nombre}</p>
+                <p><strong>NIE:</strong> ${nie}</p>
+                <p><strong>Promedio:</strong> ${promedio.toFixed(2)}</p>
+                <p><strong>Resultado:</strong> ${clasificacion.toUpperCase()}</p>
+                <p><em>Simulación de línea para notas.txt:</em><br>
+                <code>${nie}|${nombre}|${n1}|${n2}|${n3}|${examen}|${promedio.toFixed(2)}|${clasificacion}</code></p>
+            `;
+        });
+
+        document.getElementById('btnMostrarNotas').addEventListener('click', function() {
+            const archivoInput = document.getElementById('archivoNotas');
+            const vista = document.getElementById('vistaConsultaNotas');
+            
+            if (archivoInput.files.length === 0) {
+                alert('Por favor seleccione un archivo notas.txt');
+                return;
+            }
+
+            const archivo = archivoInput.files[0];
+            const lector = new FileReader();
+
+            lector.onload = function(e) {
+                const contenido = e.target.result;
+                const lineas = contenido.split('\n');
+                
+                let html = '<br><table border="1"><tr><th>NIE</th><th>Estudiante</th><th>Promedio</th><th>Resultado</th></tr>';
+                let totalEstudiantes = 0;
+                let aprobados = 0;
+                let reprobados = 0;
+
+                lineas.forEach(linea => {
+                    if (linea.trim() !== '') {
+                        totalEstudiantes++;
+                        const partes = linea.split('|');
+                        const nieVal = partes[0];
+                        const nombreVal = partes[1];
+                        const promVal = partes[6];
+                        const resVal = partes[7];
+
+                        if (resVal && resVal.toLowerCase().includes('reprobado')) {
+                            reprobados++;
+                        } else {
+                            aprobados++;
+                        }
+
+                        html += `<tr><td>${nieVal}</td><td>${nombreVal}</td><td>${promVal}</td><td>${resVal}</td></tr>`;
+                    }
+                });
+                html += '</table>';
+                html += `<p><strong>Total de estudiantes:</strong> ${totalEstudiantes}</p>`;
+                html += `<p><strong>Aprobados:</strong> ${aprobados}</p>`;
+                html += `<p><strong>Reprobados:</strong> ${reprobados}</p>`;
+
+                vista.innerHTML = html;
+            };
+
+            lector.readAsText(archivo);
+        });
+    </script>
+
+</body>
+</html>
